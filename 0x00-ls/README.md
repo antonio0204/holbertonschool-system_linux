@@ -16,4 +16,4 @@ What you should learn from this project:
 ---
 
 ## Author
-* **Ronal Antonio Aguirre Villalobos** - [arvicrin](https://github.com/ronald0204)
+* **Ronal Antonio Aguirre Villalobos** - [Ronald](https://github.com/ronald0204)
