@@ -31,5 +31,5 @@ gcc -Wall -Werror -Wextra -pedantic *.c -o hls
 ```
 
 ### By
-#### Ronal Antonio Aguirre Villalobos
+#### Ronal Antonio Aguirre Villalobos.
 
