@@ -1,13 +1,61 @@
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu89 -g
+CC 		= gcc-4.8
+CFLAGS 	= -Wall -Werror -Wextra -pedantic -g
 
-SRC = $(wildcard *.c)
-OBJS = $(patsubst %.c, %.o, $(SRC))
-0 = $(patsubst %.c, %.o, hnm.c elf.c)
+_SRC 	= nm.c \
+		  elf_utils.c \
+		  elf_utils_1.c \
+		  elf_print.c \
+		  elf_functions.c \
+		  elf_functions_32.c \
+		  elf_functions_64.c \
+		  elf_symbols_tables.c \
+		  print_buffer.c
 
-.PHONY: hnm clean
+_SRC1 	= objdump.c \
+		  elf_functions.c \
+		  elf_utils.c \
+		  elf_utils_1.c \
+		  elf_utils_2.c \
+		  elf_print.c \
+		  elf_functions_32.c \
+		  elf_functions_64.c \
+		  elf_header.c \
+		  print_buffer.c
 
-hnm: $(0)
-	$(CC) $(CFLAGS) $(0) -o hnm
-clean:
-	rm -f $(OBJS) hnm
+SRC 	= $(patsubst %,%,$(_SRC))
+SRC1	= $(patsubst %,%,$(_SRC1))
+
+_OBJ	= $(_SRC:.c=.o)
+OBJECTS = $(patsubst %,%,$(_OBJ))
+
+_OBJ1	= $(_SRC1:.c=.o)
+OBJECTS1 = $(patsubst %,%,$(_OBJ1))
+
+IDIR	= .
+SDIR	= .
+ODIR	= .
+
+OUTPUT	= hnm
+OUTPUT1 = hobjdump
+
+%.o : %.c
+		$(CC) $(CFLAGS) -c -o $@ $< -I$(IDIR)
+
+all : $(OUTPUT) $(OUTPUT1)
+
+hnm: $(OUTPUT)
+
+hobjdump : $(OUTPUT1)
+
+$(OUTPUT) : $(OBJECTS)
+		$(CC) -o $@ $^ $(LINKS)
+
+$(OUTPUT1) : $(OBJECTS1)
+		$(CC) -o $@ $^ $(LINKS)
+
+.PHONY : clean
+
+clean :
+	rm *.o
+
+re: $(OBJ) $(OBJ1)
