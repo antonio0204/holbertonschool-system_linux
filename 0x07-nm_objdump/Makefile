@@ -1,61 +1,33 @@
-CC 		= gcc-4.8
-CFLAGS 	= -Wall -Werror -Wextra -pedantic -g
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu90 -g
 
-_SRC 	= nm.c \
-		  elf_utils.c \
-		  elf_utils_1.c \
-		  elf_print.c \
-		  elf_functions.c \
-		  elf_functions_32.c \
-		  elf_functions_64.c \
-		  elf_symbols_tables.c \
-		  print_buffer.c
+SRC0 = hnm.c utils.c endian.c endian2.c elf1.c print_sections_1.c print_sections_2.c print_symbols1.c print_symbols2.c print_symbols3.c
+OBJ0 = $(SRC0:.c=.o)
+NAME0 = hnm
 
-_SRC1 	= objdump.c \
-		  elf_functions.c \
-		  elf_utils.c \
-		  elf_utils_1.c \
-		  elf_utils_2.c \
-		  elf_print.c \
-		  elf_functions_32.c \
-		  elf_functions_64.c \
-		  elf_header.c \
-		  print_buffer.c
+SRC1 = hobjdump.c utils.c endian.c endian2.c elf1.c print_sections_1.c print_sections_2.c print_symbols2.c hobjdump_1.c hobjdump_2.c
+OBJ1 = $(SRC1:.c=.o)
+NAME1 = hobjdump
 
-SRC 	= $(patsubst %,%,$(_SRC))
-SRC1	= $(patsubst %,%,$(_SRC1))
+.PHONY: all clean oclean flcean re
 
-_OBJ	= $(_SRC:.c=.o)
-OBJECTS = $(patsubst %,%,$(_OBJ))
+all: $(OBJ0) $(OBJ1)
+	$(CC) $(OBJ0) -o $(NAME0)
+	$(CC) $(OBJ1) -o $(NAME1)
+clean:
+	$(RM) *~ $(NAME0)
+	$(RM) *~ $(NAME1)
 
-_OBJ1	= $(_SRC1:.c=.o)
-OBJECTS1 = $(patsubst %,%,$(_OBJ1))
+oclean:
+	$(RM) $(OBJ0)
+	$(RM) $(OBJ1)
 
-IDIR	= .
-SDIR	= .
-ODIR	= .
+fclean: clean oclean
 
-OUTPUT	= hnm
-OUTPUT1 = hobjdump
+re: oclean all
 
-%.o : %.c
-		$(CC) $(CFLAGS) -c -o $@ $< -I$(IDIR)
+hnm: hreadelf.h $(OBJ0)
+	$(CC) $(OBJ0) -o $(NAME0)
 
-all : $(OUTPUT) $(OUTPUT1)
-
-hnm: $(OUTPUT)
-
-hobjdump : $(OUTPUT1)
-
-$(OUTPUT) : $(OBJECTS)
-		$(CC) -o $@ $^ $(LINKS)
-
-$(OUTPUT1) : $(OBJECTS1)
-		$(CC) -o $@ $^ $(LINKS)
-
-.PHONY : clean
-
-clean :
-	rm *.o
-
-re: $(OBJ) $(OBJ1)
+hobjdump: hreadelf.h $(OBJ1)
+	$(CC) $(OBJ1) -o $(NAME1)

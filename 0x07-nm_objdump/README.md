@@ -1,1 +1,1 @@
-# 0x07-nm_objdump
+# 0x07. C - ELF: nm/objdump
